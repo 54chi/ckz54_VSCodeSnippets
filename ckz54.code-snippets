@@ -1,0 +1,259 @@
+{
+	// VS Code Snippets for Salesforce B2B Commerce
+	// by 54chi
+	// --------
+	// AUX HELPERS
+	"gitignore": {
+		"prefix": "gitignore",
+		"body": [
+		"# ignore VCode config files"
+		"force.json"
+		"sfdx-project.json"
+		".forceCode"
+		".sfdx"
+		".vscode"
+		"*.code-workspace"
+		"*.log"
+		""
+		"# ignore classes, components, pages, static resources and metas from salesforce..."
+		"*.cls"
+		"*.cls-meta.xml"
+		"*.component"
+		"*.component-meta.xml"
+		"*.page"
+		"*.page-meta.xml"
+		"*.resource"
+		"*.resource-meta.xml"
+		"*.trigger"
+		"*.trigger-meta.xml"
+		""
+		"# ...with the exception of the package.xml and anything that starts with the naming convention"
+		"!package.xml"
+		"!${1:prefix}_*"
+		"!README.MD"
+		],
+		"description": "Standard ckz54 git ignore"
+	},
+	"Package": {
+		"prefix": "package",
+		"body": [
+		   "<?xml version='1.0' encoding='UTF-8'?>"
+		   " <Package xmlns='http://soap.sforce.com/2006/04/metadata'>"
+		   "	 <types>"
+		   "		 <members>*</members>"
+		   "		 <name>ApexClass</name>"
+		   "	 </types>"
+		   "	 <types>"
+		   "		 <members>*</members>"
+		   "		 <name>ApexTrigger</name>"
+		   "	 </types>"
+		   "	 <types>"
+		   "		 <members>*</members>"
+		   "		 <name>ApexComponent</name>"
+		   "	 </types>"
+		   "	 <types>"
+		   "		 <members>*</members>"
+		   "		 <name>ApexPage</name>"
+		   "	 </types>"
+		   "	<types>"
+		   "		<members>*</members>"
+		   "		<name>StaticResource</name>"
+		   "	</types>"
+		   ""
+		   "	 <types>"
+		   "		 <members>Admin</members>"
+		   "		 <members>B2B Customer Community Plus User</members>"
+		   "		 <members>B2B Customer Community User</members>"
+		   "		 <name>Profile</name>"
+		   "	 </types>"
+		   "	 <types>"
+		   "		 <members>ccrz__E_Product__c</members>"
+		   "		 <members>ccrz__E_Category__c</members>"
+		   "		 <members>ccrz__E_Attribute__c</members>"
+		   "		 <members>ccrz__E_ProductCategory__c</members>"
+		   "		 <members>ccrz__E_Spec__c</members>"
+		   "		 <members>ccrz__E_ProductSpec__c</members>"
+		   "		 <members>ccrz__E_ProductMedia__c</members>"
+		   "		 <members>ccrz__E_PriceList__c</members>"
+		   "		 <members>ccrz__E_PriceListItem__c</members>"
+		   "		 <members>ccrz__E_Cart__c</members>"
+		   "		 <members>ccrz__E_CartItem__c</members>"
+		   "		 <members>ccrz__E_Order__c</members>"
+		   "		 <members>ccrz__E_OrderItem__c</members>"
+		   "		 <name>CustomObject</name>"
+		   "	 </types>"
+		   "	 <types>"
+		   "		 <members>ccrz__E_Product__c-ccrz__CC Product Layout</members>"
+		   "		 <members>ccrz__E_Category__c-ccrz__CC Category Layout</members>"
+		   "		 <members>ccrz__E_Attribute__c-ccrz__CC Attribute Layout</members>"
+		   "		 <members>ccrz__E_ProductCategory__c-ccrz__CC Product Category Layout</members>"
+		   "		 <members>ccrz__E_Spec__c-ccrz__CC Spec Layout</members>"
+		   "		 <members>ccrz__E_ProductSpec__c-ccrz__CC Product Spec Layout</members>"
+		   "		 <members>ccrz__E_ProductMedia__c-ccrz__CC Product Media Layout</members>"
+		   "		 <members>ccrz__E_PriceList__c-ccrz__CC Price List Layout</members>"
+		   "		 <members>ccrz__E_PriceListItem__c-ccrz__CC Price List Item Layout</members>"
+		   "		 <members>ccrz__E_Cart__c-ccrz__CC Cart Layout</members>"
+		   "		 <members>ccrz__E_CartItem__c-ccrz__CC Cart Item Layout</members>"
+		   "		 <members>ccrz__E_Order__c-ccrz__CC Order Layout</members>"
+		   "		 <members>ccrz__E_OrderItem__c-ccrz__CC Order Item Layout</members>"
+		   "		 <name>Layout</name>"
+		   "	 </types>"
+		   "<!--"
+		   "    <types>"
+		   "		<members>*</members>"
+		   "		<name>Flow</name>"
+		   "	</types>"
+		   "	<types>"
+		   "		<members>*</members>"
+		   "		<name>FlowDefinition</name>"
+		   "	</types>"
+		   "	<types>"
+		   "		<members>*</members>"
+		   "		<name>Workflow</name>"
+		   "	</types>"
+		   "-->"
+		   "	 <version>45.0</version>"
+		   " </Package>"
+		],
+		"description": "Basic Package.xml for Salesforce B2B Commerce"
+   },
+   //VF PAGE HELPERS
+   "page:header":{
+	   "prefix": "apex_page",
+	   "scope": "visualforce",
+	   "description": "Default apex header for VF communities",
+	   "body": ["<apex:page docType=\"html-5.0\"" 
+		"	sidebar=\"false\" showHeader=\"false\" standardStylesheets=\"false\" "
+		"	applyHtmlTag=\"false\""
+		"	id=\"${1:pageId}\" controller=\"${2:controller(OPTIONAL)}\">"
+		"	$0"
+		""
+		"</apex:page>"
+		]
+   },
+   "script:handlebars":{
+	   "prefix": "script_hbt",
+	   "scope": "visualforce",
+	   "description": "Handlebars template declaration",
+	   "body": [
+		"<script id=\"${1:handlebarsName}\" type=\"text/template\">"
+		"	$0"
+		""
+		"</script> <!-- end of $1 hb template -->"
+		""
+	   ]
+   },
+   //APEX HELPERS
+   "ccrz:extension:hk":{
+	   "prefix":"ckz_hook",
+	   "scope":"apex",
+	   "description": "Default hook extension declaration",
+	   "body":[
+		"global with sharing class ${1:prefix}_${2:extension} extends ccrz.cc_$2 {"
+		"	$0"
+		"}"
+	   ]
+   },
+   "ccrz:extension:logic":{
+		"prefix":"ckz_logic",
+		"scope":"apex",
+		"description": "Default logic extension declaration",
+		"body":[
+		"global with sharing class ${1:prefix}_${2:extension} extends ccrz.cc$2 {"
+		"	$0"
+		"}"
+		]
+	},
+	"ccrz:extension:service":{
+		"prefix":"ckz_service",
+		"scope":"apex",
+		"description": "Default service extension declaration",
+		"body":[
+		 "global with sharing class ${1:prefix}_${2:extension} extends ccrz.cc$2 {"
+		 "	$0"
+		 "}"
+		]
+	},
+	"ccrz:method":{
+		"prefix":"ckz_method",
+		"scope":"apex",
+		"description": "Default method override declaration",
+		"body":[
+		"global override Map<String, Object> ${1:methodName}(Map<String, Object> inputData) {"
+		"	ccrz.ccLog.log(LoggingLevel.DEBUG,'M:I:$1:inputData',inputData);"
+		"	Map<String, Object> retData;"
+		"	//calls the super of the method"
+		"	retData = super.$1(inputData);"
+		"	$0"
+		"	ccrz.ccLog.log(LoggingLevel.DEBUG,'M:X:$1:retData',retData);"
+		"}"
+		""
+		]
+	},
+	//HANDLEBARS HELPERS FOR JS
+	"hbt:helper":{
+		"prefix":"hbt_helper",
+		"scope": "javascript,visualforce",
+		"description": "Handlebars helper registration",
+		"body":[
+		"Handlebars.registerHelper('${1:helperName}', function($0){"
+		"	"
+		"} // end of $1 hb helper"
+		""
+		]
+	},
+	//CCRZ STUFF FOR JS
+	"ccrz:pubsub":{
+		"prefix": "ckz_pubsub",
+		"scope": "javascript,visualforce",
+		"description": "Generic pubsub on method",
+		"body": [
+		"listenerEvent = $1;"
+		"CCRZ.pubsub.on(listenerEvent, function(theView) {"
+		"	console.log(\"$1 triggered\");"
+		"	$0"
+		"});"
+		]
+	},
+	"ccrz:events":{
+		"prefix": "ckz_events",
+		"scope": "javascript,visualforce",
+		"description": "CC View event override",
+		"body": [
+		"theView.events[\"${1:event} ${2:selector}\"] = function(){"
+		"	$0"
+		"} // end of $1$2 event"
+		"theView.delegateEvents();"
+		""
+		]
+	},
+	"ccrz:remoteaction":{
+		"prefix": "ckz_remote",
+		"scope": "javascript,visualforce",
+		"description": "Generic remote action invoke",
+		"body": [
+		"// call a custom remote action"
+		"this.className = '${1:controllerClass}';"
+		"//this.invoke*( methodName, [arg0], [arg1], ... [argN], [responseFunction], [callOptions])"
+		"this.invokeCtx("
+		"	'${2:remoteAction}',"
+		"	<REPLACE WITH ARGUMENTS AS NEEDED>,"
+		"	function(response,event){"
+		"		if(event.status){"
+		"			console.log(\"$2 remote action called successfully\");"
+		"			//do something with the response"
+		"			$0"
+		"		}else{"
+		"			console.log(\"$2 remote action called, but something went wrong\");"
+		"		}"
+		"	},"
+		"	{"
+		"		buffer:false, //this call will be executed by itself"
+		"		nmsp : false //defines that this is a call to a subscriber class"
+		"	}"
+		");"
+		""
+		]
+	}
+
+}
