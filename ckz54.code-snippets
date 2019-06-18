@@ -2,6 +2,7 @@
 	// VS Code Snippets for Salesforce B2B Commerce
 	// by 54chi
 	// --------
+	// lazy way to build these: =CONCATENATE("""",A1,"""")
 	// AUX HELPERS
 	"gitignore": {
 		"prefix": "gitignore",
@@ -14,6 +15,7 @@
 		".vscode"
 		"*.code-workspace"
 		"*.log"
+		"coverage"
 		""
 		"# ignore classes, components, pages, static resources and metas from salesforce..."
 		"*.cls"
@@ -26,6 +28,9 @@
 		"*.resource-meta.xml"
 		"*.trigger"
 		"*.trigger-meta.xml"
+		"*.flow"
+		"*.flowDefinition"
+		"*.workflow"
 		""
 		"# ...with the exception of the package.xml and anything that starts with the naming convention"
 		"!package.xml"
@@ -39,6 +44,8 @@
 		"body": [
 		   "<?xml version='1.0' encoding='UTF-8'?>"
 		   " <Package xmlns='http://soap.sforce.com/2006/04/metadata'>"
+		   "	<!-- CODE CUSTOMIZATIONS -->"
+		   "	<!-- =================== -->"
 		   "	 <types>"
 		   "		 <members>*</members>"
 		   "		 <name>ApexClass</name>"
@@ -60,6 +67,8 @@
 		   "		<name>StaticResource</name>"
 		   "	</types>"
 		   ""
+		   "	<!-- METADATA SETUP -->"
+		   "	<!-- ============== -->"
 		   "	 <types>"
 		   "		 <members>Admin</members>"
 		   "		 <members>B2B Customer Community Plus User</members>"
@@ -119,20 +128,20 @@
    },
    //VF PAGE HELPERS
    "page:header":{
-	   "prefix": "apex_page",
+	   "prefix": "ckz_apex_page",
 	   "scope": "visualforce",
 	   "description": "Default apex header for VF communities",
 	   "body": ["<apex:page docType=\"html-5.0\"" 
 		"	sidebar=\"false\" showHeader=\"false\" standardStylesheets=\"false\" "
 		"	applyHtmlTag=\"false\""
-		"	id=\"${1:pageId}\" controller=\"${2:controller(OPTIONAL)}\">"
+		"	id=\"${TM_FILENAME_BASE}\" controller=\"${1:controller(OPTIONAL)}\">"
 		"	$0"
 		""
 		"</apex:page>"
 		]
    },
    "script:handlebars":{
-	   "prefix": "script_hbt",
+	   "prefix": "ckz_script_hbt",
 	   "scope": "visualforce",
 	   "description": "Handlebars template declaration",
 	   "body": [
@@ -149,17 +158,17 @@
 	   "scope":"apex",
 	   "description": "Default hook extension declaration",
 	   "body":[
-		"global with sharing class ${1:prefix}_${2:extension} extends ccrz.cc_$2 {"
+		"global with sharing class ${TM_FILENAME_BASE} extends ccrz.${TM_FILENAME_BASE/(.*)\\_+(.*)/$2/}{"
 		"	$0"
 		"}"
 	   ]
-   },
+   },   
    "ccrz:extension:logic":{
 		"prefix":"ckz_logic",
 		"scope":"apex",
 		"description": "Default logic extension declaration",
 		"body":[
-		"global with sharing class ${1:prefix}_${2:extension} extends ccrz.cc$2 {"
+		"global with sharing class ${TM_FILENAME_BASE} extends ccrz.${TM_FILENAME_BASE/(.*)\\_+(.*)/$2/}{"
 		"	$0"
 		"}"
 		]
@@ -169,8 +178,8 @@
 		"scope":"apex",
 		"description": "Default service extension declaration",
 		"body":[
-		 "global with sharing class ${1:prefix}_${2:extension} extends ccrz.cc$2 {"
-		 "	$0"
+		"global with sharing class ${TM_FILENAME_BASE} extends ccrz.${TM_FILENAME_BASE/(.*)\\_+(.*)/$2/}{"
+		"	$0"
 		 "}"
 		]
 	},
@@ -180,19 +189,84 @@
 		"description": "Default method override declaration",
 		"body":[
 		"global override Map<String, Object> ${1:methodName}(Map<String, Object> inputData) {"
-		"	ccrz.ccLog.log(LoggingLevel.DEBUG,'M:I:$1:inputData',inputData);"
+		"	ccrz.ccLog.log(LoggingLevel.DEBUG,'M:I:${TM_FILENAME_BASE}:$1:inputData',inputData);"
 		"	Map<String, Object> retData;"
-		"	//calls the super of the method"
-		"	retData = super.$1(inputData);"
+		"	if (Test.isRunningTest()) {"
+		"		retData = new Map<String, Object>{"
+		"			//replace with your custom test data"
+		"		};"
+		"	} else {"
+		"		//calls the super of the method"
+		"		retData = super.$1(inputData);"
+		"	}"
 		"	$0"
-		"	ccrz.ccLog.log(LoggingLevel.DEBUG,'M:X:$1:retData',retData);"
+		"	ccrz.ccLog.log(LoggingLevel.DEBUG,'M:X:${TM_FILENAME_BASE}:$1:retData',retData);"
+		"	return retData;"
+		"}"
+		""
+		]
+	},
+	"ccrz:remote":{
+		"prefix": "ckz_remote",
+		"scope": "apex",
+		"description": "Default remote action declaration",
+		"body":[
+		"@RemoteAction"
+		"global static ccrz.cc_RemoteActionResult ${1:methodName}(ccrz.cc_RemoteActionContext ctx, String someParameter) {"
+		"	ccrz.cc_RemoteActionResult res = ccrz.cc_CallContext.init(ctx);"
+		""
+		"	ccrz.ccLog.log(LoggingLevel.DEBUG,'M:E:${TM_FILENAME_BASE}:$1');"
+		"	try{"
+		"		// string staticStoreName = ccrz.cc_CallContext.storefront;"
+		"		// string currentUserId = ccrz.cc_CallContext.currUserId;"
+		"		// Remote action"
+		"		$0"
+		"		res.success = true;"
+		"		res.data = '';"
+		"	}catch(Exception e){"
+		"		ccrz.ccLog.log(LoggingLevel.ERROR,'M:X:${TM_FILENAME_BASE}:$1:error',e);"
+		"	}finally{"
+		"		ccrz.ccLog.log(LoggingLevel.DEBUG,'M:X:${TM_FILENAME_BASE}:$1:res',res);"
+		"		ccrz.ccLog.close(res);"
+		"	}"
+		"	return res;"
+		"}"
+		]
+
+	},
+	"ccrz:test:class":{
+		"prefix": "ckz_test_class",
+		"scope": "apex",
+		"description": "Default test class declaration",
+		"body":[
+		"@IsTest public with sharing class ${TM_FILENAME_BASE} {"
+		"	$0"
+		"}"
+		]
+	},
+	"ccrz:test:method":{
+		"prefix": "ckz_test_method",
+		"scope": "apex",
+		"description": "Default test method declaration",
+		"body":[
+		"@IsTest public static void test${1:methodToTest}() {"
+		"	Test.startTest();"
+		"	// Instantiate a new class"
+		"	${2:className} testClass = new $2();"
+		"	// Test $1"
+		"	Map<String,Object> $1;"
+		"	$1 = testClass.$1(new Map<String,Object>());"
+		"	$0"
+		"	System.assert(String.isNotBlank($1));"
+		"	System.assert($1.contains('value to check'));"
+		"	Test.stopTest();"
 		"}"
 		""
 		]
 	},
 	//HANDLEBARS HELPERS FOR JS
 	"hbt:helper":{
-		"prefix":"hbt_helper",
+		"prefix":"ckz_hbt_helper",
 		"scope": "javascript,visualforce",
 		"description": "Handlebars helper registration",
 		"body":[
@@ -204,15 +278,16 @@
 	},
 	//CCRZ STUFF FOR JS
 	"ccrz:pubsub":{
-		"prefix": "ckz_pubsub",
+		"prefix": "ckz_pubSub",
 		"scope": "javascript,visualforce",
-		"description": "Generic pubsub on method",
+		"description": "Generic pubSub on method",
 		"body": [
-		"listenerEvent = $1;"
-		"CCRZ.pubsub.on(listenerEvent, function(theView) {"
+		"theEvent = '$1';"
+		"CCRZ.pubSub.on(theEvent, function(theView) {"
 		"	console.log(\"$1 triggered\");"
 		"	$0"
-		"});"
+		"});  // end of $1 pubSub"
+		""
 		]
 	},
 	"ccrz:events":{
@@ -228,7 +303,7 @@
 		]
 	},
 	"ccrz:remoteaction":{
-		"prefix": "ckz_remote",
+		"prefix": "ckz_remoteinvoke",
 		"scope": "javascript,visualforce",
 		"description": "Generic remote action invoke",
 		"body": [
@@ -251,9 +326,69 @@
 		"		buffer:false, //this call will be executed by itself"
 		"		nmsp : false //defines that this is a call to a subscriber class"
 		"	}"
-		");"
+		"); // end of $2 remote invoke"
 		""
 		]
-	}
+	},
+	"ccrz.readme": {
+		"prefix": "ckz_readme",
+		"scope": "markdown",
+		"body": [
+		  "# ${1:CustomerName} Storefront(s)",
+		  "",
+		  "## About",
+		  "",
+		  "Customer: $1",
+		  "",
+		  "### Description:",
+		  "",
+		  "$1 is",
+		  "",
+		  "### B2B Commerce Settings (Dev):",
+		  "",
+		  "Org ID:",
+		  "Org Instance:",
+		  "Version:",
+		  "Storefront Name(s):",
+		  "Storefront URL(s):",
+		  "Test contact(s):",
+		  "Prefix(es):",
+		  "",
+		  "### B2B Collaboration Space(s)",
+		  "",
+		  "Quip landing page:",
+		  "Chatter group:",
+		  "PSA project page:",
+		  "",
+		  "## Main customization",
+		  "",
+		  "* Custom Resource-Bundles:",
+		  "    * Themes",
+		  "    * Other",
+		  "* Custom Classes:",
+		  "    * Apex Classes",
+		  "    * Apex Triggers",
+		  "    * Other",
+		  "* Custom VF Pages/Components:",
+		  "    * VF Pages",
+		  "    * VF Components",
+		  "* Custom Object customization:",
+		  "",
+		  "### Screenshots",
+		  "",
+		  "### Deployment instructions",
+		  "",
+		  "E.g.",
+		  "```",
+		  "1. sfdx force:auth:web:login -a aliasname",
+		  "2. sfdx force:config:set defaultusername=XXXX@XXXXXXX.XXX",
+		  "3. sfdx force:source:retrieve -x manifest/package.xml",
+		  "4. sfdx force:source:deploy --sourcepath force-app/main/default/classes/ckz_hk_UserInterface.cls",
+		  "```",
+		  ""
+		],
+		"description": "Default B2B Commerce Readme"
+	  }
+
 
 }
